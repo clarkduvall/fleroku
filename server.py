@@ -41,4 +41,6 @@ def logout():
 @app.route('/')
 @app.route('/<path:path>')
 def index(path=None):
-    return render_template('index.html', token=session.get('access_token', ''))
+    return render_template('index.html',
+                           token=session.get('access_token', ''),
+                           client_id=API_CLIENT_ID)
