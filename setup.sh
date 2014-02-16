@@ -28,7 +28,7 @@ heroku config:set "API_CLIENT_SECRET=$client_secret"
 heroku config:set "FLASK_SECRET=`cat /dev/urandom | head -c 1 | md5sum - | awk '{print $1}'`"
 
 # Put config in .env so foreman can use it.
-heroku config | tail -n+2 > .env
+heroku config | tail -n+2 | sed 's/  \+/ /g' > .env
 
 # Push and open the app.
 git push heroku master
