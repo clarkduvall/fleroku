@@ -15,11 +15,13 @@ app.secret_key = os.environ['FLASK_SECRET']
 ACCESS_TOKEN_URL = '<API ACCESS TOKEN ENDPOINT HERE>'
 API_CLIENT_ID = os.environ['API_CLIENT_ID']
 API_CLIENT_SECRET = os.environ['API_CLIENT_SECRET']
+IS_PRODUCTION = 'DYNO' in os.environ
 
 
 def https_url_for(*args, **kwargs):
-    kwargs['_scheme'] = 'https'
-    kwargs['_external'] = True
+    if IS_PRODUCTION:
+        kwargs['_scheme'] = 'https'
+        kwargs['_external'] = True
     return url_for(*args, **kwargs)
 
 
@@ -33,7 +35,7 @@ def callback():
     }, headers={'Accept': 'application/json'})
 
     if response.ok:
-        session['access_token'] =  response.json()['access_token']
+        session['access_token'] =  response.json().get('access_token')
 
     return redirect(https_url_for('.index'))
 
